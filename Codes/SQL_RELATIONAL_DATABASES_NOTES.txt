@@ -1,0 +1,147 @@
+SQL - DATABASE
+
+A relational database is a collection of data organized into tables. These tables are made of rows and columns.
+Rows represent individual records,
+Columns represent the attributes or fields that describe each record, where attributes are common for all rows
+
+One of the key characteristics of relational databases is that they allow us to connect different pieces of information by linking tables through common attributes, making it easier to see how they relate to each other.
+Relational databases require a schema. The schema defines the overall structure of the database, including its tables, columns, data types, relationships, and constraints.
+
+They offer several advantages, including scalability. They can handle large datasets, so they're perfect for complex, real-world applications. 
+They also enforce data integrity through primary keys, foreign keys, and data types, which ensures that the data will be consistent and accurate.
+
+PostgreSQL is officially described as "The World's Most Advanced Open Source Relational Database."
+It's a free, open source object-relational database system known for its reliability, data integrity, and extensibility. 
+For example, you can define your own data types, custom functions, and write code in different programming languages without re-compiling your database.
+
+SQL DEFINITOIN: 
+SQL is a programming language used for storing and managing data in relational databases.
+With SQL, you can add, change, delete, find, and retrieve data from a relational database. 
+It provides a comprehensive set of commands for querying, filtering, sorting, and aggregating data.
+
+it can be easily integrated with a wide range of programming languages
+
+Command to open psql --> psql -U postgres -d postgres
+CREATE DATABASE my_database;  --> to create data
+\c my_database  --> to change data
+
+There are six popular categories of data types in SQL:
+1. Numeric, such as INTEGER, FLOAT, SERIAL, and DECIMAL.
+2. Date and time, such as TIMESTAMP, DATE, and TIME.
+3  Character and string. These include CHAR, VARCHAR, and TEXT.
+4. Unicode, including NTEXT, and NVARCHAR. These are used to make sure that text will be stored and retrieved correctly, regardless of the characters' origin.
+5. Binary, used to store non-textual data, like images, audio, and video files.
+6. And other miscellaneous data types, such as XML and TABLE.
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+1. INTEGER types consume 4 bytes in the database and can range in value from -2,147,483,648 to 2,147,483,647. 
+   SMALLINT and BIGINT, which are basically the same as INTEGER except have a smaller and bigger range of numbers, respectively, due to how much size they are allotted in the database.
+2. SERIAL , It's very helpful for creating unique identifier columns because the column will have an INTEGER type, will not allow NULL values, and automatically increment when rows are added.
+3. VARCHAR data type. This data type is used for a variable string length. You can set the maximum character length within parentheses:
+4. To store strings of any length, you can use TEXT instead:
+5. DATE, TIME, TIMESTAMP
+6. to store a boolean value, TRUE or FALSE, you can use the BOOLEAN data type:
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+A primary key is a column or set of columns that uniquely identifies each record (row) in a table. 
+This constraint ensures that no records in the table will have the same value for the primary key.
+Values in the primary key column can't be NULL either, so they will always have a valid value.
+To adda a primary key --> column_name data_type PRIMARY KEY
+
+A composite primary key is for when a table doesn't have a single unique column to identify the row. but uses a combination of two or more columns as the primary key that, together, are unique.
+CREATE TABLE table_name (
+  column1 data_type column_constraint,
+  column2 data_type column_constraint,
+  column3 data_type column_constraint,
+  ...
+  PRIMARY KEY (column1, column2)
+);
+
+Primary keys are essential for ensuring data uniqueness and integrity, for optimizing data retrieval, and for establishing relationships with other tables in a relational database.
+-------------------------------------------------------
+
+A foreign key is a column (or set of columns) in a table that references the primary key of another table. A table can have multiple foreign keys.
+FOREIGN KEY (customer_id) REFERENCES customers(customer_id)
+CREATE TABLE customers (
+  customer_id SERIAL PRIMARY KEY,
+  first_name VARCHAR(100) NOT NULL,
+  ...
+);
+
+CREATE TABLE orders (
+  order_id SERIAL PRIMARY KEY,
+  customer_id INTEGER,
+  ...
+  FOREIGN KEY (customer_id) REFERENCES customers(customer_id)
+);
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Different tables can have different types of relationships.
+There are five main types of relations:
+1. one-to-one --> Two tables have a one-to-one relationship when each record in the first table can be associated with at most one record in the second table, and vice versa.
+2. one-to-many --> one-to-many relationships occur when one record in a table can be related to one or more records in another table.
+3. many-to-one --> This is the same as the many-to-one relation, but from the opposite perspective
+4. many-to-many --> Many-to-many relationships occur when a record in a table can be related to multiple records in another table and vice versa.
+5. And self-referencing relationships (also known as recursive relationships) --> which occur when the records of a table can be related to other records on the same table. 
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Even though relational databases organize data into separate tables, 
+SQL's JOIN operations allow you to combine related information from tables to query data.
+
+1. INNER JOIN  ---> filters the result to include only rows where the values in the joining columns that you specify are equal in both tables. (when both tables have equal values rows), If there are no matching values, then those rows are not includeed in result
+
+2. FULL OUTER JOIN --> returns all rows from both tables. 
+						If a match is found in the specified columns, the data is combined and you get all columns for each matching record.
+						If there's no match in the specified columns, in either one of the tables, the missing columns are filled with NULL values.
+
+3. LEFT OUTER JOIN -->  is used to get all the records from the left table and the matching information from the right table for each row of the left table.
+						If no match is found, the columns from the right table are filled in with NULL values.
+
+
+4. RIGHT OUTER JOIN --> we get all the records from the right table and the matching information from the left table for each row of the right table.
+						If there's no match, the columns from the left table are filled in with NULL values.
+						
+5. SELF JOIN --> allows you to join the table with itself. You can think of it as joining two copies of the same table. 
+				 This is helpful for comparing different rows within the same table.
+
+6. CROSS JOIN --> joins every row from the first table with every row of the second table. 
+				  Therefore, it generates all possible row combinations. 
+				  This operation doesn't need any conditions to join the tables.
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+SQL Commands to interact from psql
+1. psql --username= <username> --dbname=<database name>  (psql --username=freecodecamp --dbname=postgres)
+2. \l --> to list databases in this server
+3. CREATE DATABASE first_database;  --> creta databases
+4. connect to a database by entering " \c database_name "
+5. \l(list database),   \c (connect to sepcific DB),  \d(list tables in conected DB)
+6. CREATE TABLE <table_name>(); or CREATE TABLE table_name(column_name DATATYPE CONSTRAINTS);  --> to create tables , note that paranthesis exists after table_name., where we add column name, column data type and constraints 
+7. \d second_table --> to dis[play specific table 
+8.  ALTER TABLE second_table ADD COLUMN first_column INT ; --> To add column with datatype
+8a.	ALTER TABLE charcaters ADD COLUMN name VARCHAR(30) NOT NULL ;--> adding column with constraints
+8b. ALTER TABLE sounds ADD COLUMN filename VARCHAR(40) NOT NULL UNIQUE ; --> with column properties.
+9.  ALTER TABLE second_table DROP COLUMN age; --> To drop a column 
+10. ALTER TABLE table_name RENAME COLUMN column_name TO new_name; --> 
+11. INSERT INTO table_name(column_1, column_2) VALUES(value1, value2);--> To add rows in to table 
+12. DELETE FROM table_name WHERE condition; (DELETE FROM second_table WHERE username='Luigi';)--> To delete rows with filter condition
+13. DROP TABLE table_name; --> to drop TABLE
+14. ALTER DATABASE database_name RENAME TO new_database_name;(ALTER DATABASE first_database RENAME TO mario_database ;) --> to rename datases 
+15. UPDATE table_name SET column_name=new_value WHERE condition;(UPDATE characters SET favorite_color ='Orange' WHERE name='Daisy';) --> to update rows 
+16. ALTER TABLE table_name ADD PRIMARY KEY(column_name);(ALTER TABLE characters ADD PRIMARY KEY (name) ;) --> to add primary key for exisiting column 
+17. ALTER TABLE table_name DROP CONSTRAINT constraint_name; --> to remove any constraints for existing column 
+18. ALTER TABLE table_name ADD COLUMN column_name DATATYPE REFERENCES referenced_table_name(referenced_column_name); (ALTER  TABLE more_info ADD COLUMN character_id INT REFERENCES characters(character_id) ;)  --> To add foreign key in one table that relates to another table.
+18a. ALTER TABLE table_name ADD COLUMN column_name DATATYPE CONSTRAINT REFERENCES referenced_table_name(referenced_column_name);
+18b. ALTER TABLE table_name ADD FOREIGN KEY(column_name) REFERENCES referenced_table(referenced_column);  --> add foreign key to exisiting column
+19. ALTER TABLE table_name ADD UNIQUE(column_name); --> for one to one relationship, so making relationship unique.
+20. ALTER TABLE table_name ALTER COLUMN column_name SET NOT NULL; (ALTER TABLE more_info ALTER COLUMN character_id SET NOT NULL ;) --> change column properties 
+21. To join three tables.
+			SELECT columns FROM junction_table
+			FULL JOIN table_1 ON junction_table.foreign_key_column = table_1.primary_key_column
+			FULL JOIN table_2 ON junction_table.foreign_key_column = table_2.primary_key_column;
+
+NOTE 1 : SERIAL datatype adds INT values with NOT NULL constraints and increments number when ne row is added 
+NOTE 2 : NUMERIC(4, 1).data type is for decimals. NUMERIC(4, 1) has up to four digits and one of them has to be to the right of the decimal.
+
