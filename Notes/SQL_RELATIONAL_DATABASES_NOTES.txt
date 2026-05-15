@@ -143,7 +143,7 @@ SQL Commands to interact from psql
 			FULL JOIN table_2 ON junction_table.foreign_key_column = table_2.primary_key_column;
 22. ALTER TABLE majors_courses ADD PRIMARY KEY (major_id, course_id); --> to create composite primary keys
 23.TRUNCATE majors; --> to delete all data in table
-
+24. UPDATE bikes SET available = false WHERE available = true; --> to update columns
 
 NOTE 1 : SERIAL datatype adds INT values with NOT NULL constraints and increments number when ne row is added 
 NOTE 2 : NUMERIC(4, 1).data type is for decimals. NUMERIC(4, 1) has up to four digits and one of them has to be to the right of the decimal.
@@ -260,42 +260,38 @@ wildcards charcaters:
 7. USING --> to join tables if the foreign key column has the same name in both tables.
 
 
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
+Running SQL Commands in Bash
+You can run SQL commands directly from the command line using the psql command-line client for PostgreSQL or similar tools for other databases.
 
+For example, to run a SQL file in PostgreSQL:
 
+psql -U username -d database_name -c "SELECT * FROM students;"
+You can also execute MySQL commands directly:
 
+mysql -u username -p database_name -e "SELECT * FROM students;"
+Run SQL from a File
+# PostgreSQL
+psql -U username -d database_name -f script.sql
 
+# MySQL
+mysql -u username -p database_name < script.sql
 
-
-
-
-
-
-
-
-
-
-
+Embed SQL in a Bash Script
 #!/bin/bash
+DB_USER="school_admin"
+DB_NAME="school"
 
-#Info about my computer science students from students database
-echo -e "\n~~ My Computer Science Students ~~\n"
+# Insert student data
+psql -U "$DB_USER" -d "$DB_NAME" -c \
+"INSERT INTO students (name, age, major) VALUES ('Alice', 20, 'CS');"
 
-PSQL="psql -X --username=freecodecamp --dbname=students --no-align --tuples-only -c"
-echo -e "\nFirst name, last name, and GPA of students with a 4.0 GPA:"
-echo "$($PSQL "SELECT first_name, last_name, gpa FROM students WHERE gpa=4.0;")"
-echo -e "\nAll course names whose first letter is before 'D' in the alphabet:"
-echo "$($PSQL " SELECT course FROM courses WHERE course < 'D';")"
-echo -e "\nFirst name, last name, and GPA of students whose last name begins with an 'R' or after and have a GPA greater than 3.8 or less than 2.0:"
-echo "$($PSQL "SELECT first_name, last_name, gpa FROM students WHERE (last_name ='R' or last_name > 'R') and (gpa > 3.8 or gpa < 2.0) ")"
-echo -e "\nLast name of students whose last name contains a case insensitive 'sa' or have an 'r' as the second to last letter:"
-echo "$($PSQL "SELECT last_name FROM students WHERE last_name ILIKE '%sa%' or  last_name LIKE '%r_'")"
-echo -e "\nFirst name, last name, and GPA of students who have not selected a major and either their first name begins with 'D' or they have a GPA greater than 3.0:"
-echo "$($PSQL "SELECT first_name, last_name, gpa FROM students WHERE major_id IS NULL AND (first_name LIKE 'D%' OR gpa > 3.0)")"
-echo -e "\nCourse name of the first five courses, in reverse alphabetical order, that have an 'e' as the second letter or end with an 's':"
-echo "$($PSQL "SELECT course FROM courses WHERE course LIKE '_e%' or course LIKE '%s' ORDER BY course DESC LIMIT 5")"
-echo -e "\nAverage GPA of all students rounded to two decimal places:"
+
+
+
+
 
 
 

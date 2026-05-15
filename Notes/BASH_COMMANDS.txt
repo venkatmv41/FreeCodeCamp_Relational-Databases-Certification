@@ -470,6 +470,66 @@ Advanced Bash 2
 2j. [0-9]+ to match one or more numbers.
 3. diff --> to view content differences
 
+REGEX wildcards
+a. ^ --> indicated beginning of pattern
+b. $ --> indicated end of pattern
+c. + --> matches one or more numbers
+d. * --> matches zero or more numberss
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+ADVANCED BASH 3
+
+
+1. CASE EXPRESSION
+syntax :	case EXPRESSION in
+				PATTERN) STATEMENTS ;;
+				PATTERN) STATEMENTS ;;
+				PATTERN) STATEMENTS ;;
+				*) STATEMENTS ;;
+			esac
+
+2. ^ says about beginning of pattern
+   $ says about end of pattern
+   ^[0-9]$ --> this says that it starts with number and ends with number 
+2a. 1 =~ ^[0-9]$  --> represents and matches single number 
+2b. 11 =~ ^[0-9]+$ --> allows any strings that start, contain one or more numbers, and end.
+2c. ! 11 =~ ^[0-9]+$ --> not a number but matches with other data types
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Running SQL Commands in Bash
+You can run SQL commands directly from the command line using the psql command-line client for PostgreSQL or similar tools for other databases.
+
+For example, to run a SQL file in PostgreSQL:
+
+psql -U username -d database_name -c "SELECT * FROM students;"
+You can also execute MySQL commands directly:
+
+mysql -u username -p database_name -e "SELECT * FROM students;"
+Run SQL from a File
+# PostgreSQL
+psql -U username -d database_name -f script.sql
+
+# MySQL
+mysql -u username -p database_name < script.sql
+
+Embed SQL in a Bash Script
+#!/bin/bash
+DB_USER="school_admin"
+DB_NAME="school"
+
+# Insert student data
+psql -U "$DB_USER" -d "$DB_NAME" -c \
+"INSERT INTO students (name, age, major) VALUES ('Alice', 20, 'CS');"
+
+
+
+
+
+
+
+
 
 
 
